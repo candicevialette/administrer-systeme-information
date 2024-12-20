@@ -1,0 +1,33 @@
+Write-Host "Votre mot de passe doit contenir plus de 12 caractères, au moins une lettre, un chiffre et un caractère spécial"
+
+$mdp = Read-Host -AsSecureString "Entrez votre mot de passe"
+$mdp = [Runtime.InteropServices.Marshal]::PtrToStringAuto([Runtime.InteropServices.Marshal]::SecureStringToBSTR($mdp))
+
+# Vérification de la longueur
+if ($mdp.Length -le 12) {
+    Write-Host "Le mot de passe doit contenir plus de 12 caractères." -ForegroundColor Red
+    exit
+}
+
+# Vérification des critères
+$contientLettre = $mdp -match "[a-zA-Z]"
+$contientChiffre = $mdp -match "\d"
+$contientSpecial = $mdp -match "[^a-zA-Z0-9]"
+
+# Vérifications et messages
+if (-not $contientLettre) {
+    Write-Host "Le mot de passe doit contenir au moins une lettre." -ForegroundColor Red
+}
+if (-not $contientChiffre) {
+    Write-Host "Le mot de passe doit contenir au moins un chiffre." -ForegroundColor Red
+}
+if (-not $contientSpecial) {
+    Write-Host "Le mot de passe doit contenir au moins un caractère spécial." -ForegroundColor Red
+}
+
+# Validation du mot de passe
+if ($contientLettre -and $contientChiffre -and $contientSpecial) {
+    Write-Host "Votre mot de passe est accepté !" -ForegroundColor Green
+} else {
+    Write-Host "Veuillez corriger votre mot de passe." -ForegroundColor Yellow
+}
